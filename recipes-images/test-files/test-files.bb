@@ -5,9 +5,6 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI =   "file://media-files/abcaudiosample48.mp3 \
              file://media-files/abcaudiosample48.wav \
-             file://media-files/dua-lipa44.mp3 \
-             file://media-files/dua-lipa44.wav \
-             file://media-files/dua-lipa48.mp3 \
              file://media-files/image01.jpg \
              file://media-files/image02.jpg \
              file://media-files/image03.jpg \
