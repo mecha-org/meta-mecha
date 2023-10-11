@@ -21,9 +21,6 @@ do_install() {
     install -d ${D}/home/mecha/media-files/
     install -m 0775 ${WORKDIR}/media-files/abcaudiosample48.mp3         ${D}/home/mecha/media-files/abcaudiosample48.mp3
     install -m 0775 ${WORKDIR}/media-files/abcaudiosample48.wav         ${D}/home/mecha/media-files/abcaudiosample48.wav
-    install -m 0775 ${WORKDIR}/media-files/dua-lipa44.mp3               ${D}/home/mecha/media-files/dua-lipa44.mp3
-    install -m 0775 ${WORKDIR}/media-files/dua-lipa44.wav               ${D}/home/mecha/media-files/dua-lipa44.wav 
-    install -m 0775 ${WORKDIR}/media-files/dua-lipa48.mp3               ${D}/home/mecha/media-files/dua-lipa48.mp3
     install -m 0775 ${WORKDIR}/media-files/image01.jpg                  ${D}/home/mecha/media-files/image01.jpg
     install -m 0775 ${WORKDIR}/media-files/image02.jpg                  ${D}/home/mecha/media-files/image02.jpg
     install -m 0775 ${WORKDIR}/media-files/image03.jpg                  ${D}/home/mecha/media-files/image03.jpg
