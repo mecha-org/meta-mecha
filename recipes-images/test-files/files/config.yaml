@@ -1,0 +1,25 @@
+name: mecha-compute-g1
+interfaces:
+   display: 
+     device: /sys/class/backlight/backlight/brightness
+   battery:
+     device: /sys/class/power_supply/bq27441-0/uevent
+     capacity: /sys/class/power_supply/bq27441-0/capacity
+     voltage: /sys/class/power_supply/bq27441-0/voltage_now
+     current: /sys/class/power_supply/bq27441-0/current_now
+   gyroscope:
+     x_axis: /sys/bus/iio/devices/iio:device1/in_anglvel_x_raw
+     y_axis: /sys/bus/iio/devices/iio:device1/in_anglvel_y_raw
+     z_axis: /sys/bus/iio/devices/iio:device1/in_anglvel_z_raw
+   led:
+     red_led : /sys/class/leds/red-led/brightness
+     green_led : /sys/class/leds/green-led/brightness
+     blue_led : /sys/class/leds/blue-led/brightness
+   adc:
+     channel_1: /sys/bus/iio/devices/iio:device0/in_voltage0_raw
+     channel_2: /sys/bus/iio/devices/iio:device0/in_voltage1_raw
+     sampling_frequency: /sys/bus/iio/devices/iio:device0/in_voltage0_sampling_frequency
+   camera:
+     device: /dev/video0
+   audio:
+     audio_file: sample1.wav 

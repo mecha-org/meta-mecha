@@ -38,6 +38,7 @@ PACKAGECONFIG ?= " \
 	${@bb.utils.filter('DISTRO_FEATURES', 'vulkan', d)} \
 	${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)} \
 	libinput \
+	xwayland \
 "
 
 SRC_URI = "git://gitlab.freedesktop.org/wlroots/wlroots.git;branch=0.16;protocol=https"
