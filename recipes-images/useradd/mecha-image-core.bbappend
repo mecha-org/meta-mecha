@@ -7,20 +7,52 @@ IMAGE_INSTALL:append = " sudo"
 #IMAGE_ROOTFS_SIZE ?= "4192"
 
 EXTRA_USERS_PARAMS = "\
-    useradd -p '\$5\$11223344\$Qi1UvJ46XO2CCaKoCyuMjV4cPu7YWZYWoSJpu3gdGsD' ${USER}; \
+    useradd -s /bin/zsh -p '\$5\$11223344\$Qi1UvJ46XO2CCaKoCyuMjV4cPu7YWZYWoSJpu3gdGsD' ${USER}; \
     usermod -aG video ${USER}; \
     usermod -aG sudo ${USER}; \
     usermod -aG render ${USER}; \
     usermod -aG input ${USER}; \ 
+    useradd -M greeter; \
+    usermod -aG video greeter; \
+    usermod -aG render greeter; \
 "
 
+# do_install:append() {
+#     install -d ${D}/home/mecha/
+#     chown -R ${USER}:${USER} ${IMAGE_ROOTFS}/home/mecha
+# }
+#USERADD_PARAM:${PN} = "--home /home/weston --shell /bin/sh --user-group -G video,input weston"
+# useradd -s /bin/zsh
 #usermod -L -e 1 root; 
 #passwd-expire ${USER}; 
 
 enable_sudo_group() {
     echo "mecha ALL=(ALL:ALL) ALL" >> ${IMAGE_ROOTFS}/etc/sudoers
+    echo "# Add /sbin PATH for mecha user" >> ${IMAGE_ROOTFS}/etc/profile
+    echo "[ \"\$HOME\" != \"/home/mecha\" ] || PATH=\$PATH:/usr/local/sbin:/usr/sbin:/sbin:/bin" >> ${IMAGE_ROOTFS}/etc/profile
 }
+# chown -R mecha:mecha ${IMAGE_ROOTFS}/home/mecha
+#    echo "[ "\$HOME" != "/home/mecha" ] || PATH=\$PATH:/usr/local/sbin:/usr/sbin:/sbin" >> ${IMAGE_ROOTFS}/etc/profile
+
+# change_vpu_hantro_dma_buf_permisssion() {
+
+#     chown -R video ${IMAGE_ROOTFS}/dev/dma_heap/linux,cma
+#     chown -R video ${IMAGE_ROOTFS}/dev/dma_heap/linux,cma-uncached
+#     chown -R video ${IMAGE_ROOTFS}/dev/dma_heap/system
+
+#     chmod 660 ${IMAGE_ROOTFS}/dev/dma_heap/linux,cma
+#     chmod 660 ${IMAGE_ROOTFS}/dev/dma_heap/linux,cma-uncached
+#     chmod 660 ${IMAGE_ROOTFS}/dev/dma_heap/system
+
+#     chown -R video ${IMAGE_ROOTFS}/dev/mxc_hantro
+#     chown -R video ${IMAGE_ROOTFS}/dev/mxc_hantro_h1
+
+#     chmod 660 ${IMAGE_ROOTFS}/dev/mxc_hantro
+#     chmod 660 ${IMAGE_ROOTFS}/dev/mxc_hantro_h1
+# }
+
 ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group;"
+#ROOTFS_POSTPROCESS_COMMAND += "change_vpu_hantro_dma_buf_permisssion;"
 
 
 #do_install() {
