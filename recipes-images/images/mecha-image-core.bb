@@ -60,11 +60,15 @@ CORE_IMAGE_EXTRA_INSTALL += " \
 "
 
 # Enable package-management
-#EXTRA_IMAGE_FEATURES += "package-management"
+EXTRA_IMAGE_FEATURES += "package-management"
+PACKAGE_FEED_URIS = "https://mecha-org.com/packagerepos/release \
+                     https://mecha-org.com/packagerepos/updates"
+PACKAGE_FEED_BASE_PATHS = "deb deb-dev"
+#PACKAGE_FEED_ARCHS = "all core2-64"
 
 IMAGE_INSTALL:append = " connman connman-client" 
 IMAGE_INSTALL:append = " ntp"
-NTP_SERVERS = "time.google.com time1.google.com"
+NTP_SERVERS = "time.google.com time1.google.com time.cloudflare.com"
 
 IMAGE_INSTALL:append = " mesa mesa-demos"     
 IMAGE_INSTALL:append = " bluez5"     
@@ -73,7 +77,7 @@ IMAGE_INSTALL:append = " git"
 # IMAGE_INSTALL:append = " easysplash"     
 # IMAGE_INSTALL:append = " easysplash-bootanimation-lafon"     
 IMAGE_INSTALL:append = " easysplash easysplash-bootanimation-mecha"     
-
+IMAGE_INSTALL:append = " overlays"
 
 # poky/meta/recipes-graphics/xorg-app/
 IMAGE_INSTALL:append = " xhost xauth sysbench htop"
@@ -86,16 +90,22 @@ IMAGE_INSTALL:append = " phoc"
 #IMAGE_INSTALL:append = " sway-18 sway-login-configs"
 IMAGE_INSTALL:append = " sway sway-login-configs libpam-pwdfile"
 # IMAGE_INSTALL:append = " way-vnc neatvnc"
-IMAGE_INSTALL:append = " greetd wlgreet dlm gtkgreet"
+IMAGE_INSTALL:append = " greetd wlgreet dlm gtkgreet wlr-randr"
 IMAGE_INSTALL:append = " gtk4"
 IMAGE_INSTALL:append = " zsh"
 IMAGE_INSTALL:append = " foot"
 IMAGE_INSTALL:append = " tzdata"
+IMAGE_INSTALL:append = " wvkbd lisgd"
 
+
+# Recipes Graphics Mecha-Launcher
+IMAGE_INSTALL:append = " mecha-launcher mecha-action-bar mecha-app-dock mecha-app-drawer \
+                         mecha-lock-screen mecha-settings-drawer mecha-status-bar \
+                        "
 
 
 # Media files to test audio-video & photos
 IMAGE_INSTALL:append = " test-files"
 
 IMAGE_INSTALL:append = " wpewebkit cog"
-IMAGE_INSTALL:append = " chromium-ozone-wayland"
+#IMAGE_INSTALL:append = " chromium-ozone-wayland"

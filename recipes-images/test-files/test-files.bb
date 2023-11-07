@@ -35,6 +35,7 @@ do_install() {
 INSANE_SKIP_${PN}:append = "already-stripped"
 FILES:${PN} += "/MECHA_TEST/*"
 
+
 #   install -d ${D}/${ROOT_HOME}/media-files/
 #   FILES:${PN} += "${ROOT_HOME}/*"
 

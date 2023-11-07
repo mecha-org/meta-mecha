@@ -1,0 +1,30 @@
+.window {
+    background: rgba(5, 7, 10, 0);
+    font-family: 'Space Grotesk';
+    padding: 0px 18px;
+    min-width: 100%;
+    color: #FFFFFF;
+}
+
+.container {
+    min-width: 100%;
+    /* background-color: red; */
+}
+
+.left {}
+
+.center {}
+
+.right {}
+
+.clock {
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.icon {
+    min-width: 21px;
+    min-height: 21px;
+}
