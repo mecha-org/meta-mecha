@@ -245,9 +245,6 @@ SRC_URI += " \
     crate://crates.io/xml-rs/0.8.19 \
 "
 
-SRC_URI:append =   "file://mecha-launcher-assets \
-                    file://mecha-launcher-settings \
-                   "
 
 DEPENDS:append = " pkgconfig pkgconfig-native gtk4 libadwaita gtk4-layer-shell nativesdk-protobuf protobuf-c-native"
 
