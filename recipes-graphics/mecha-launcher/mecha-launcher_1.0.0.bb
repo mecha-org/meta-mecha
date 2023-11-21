@@ -256,8 +256,25 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 do_install:append() {
     install -d ${D}${sysconfdir}
-    cp -r ${WORKDIR}/mecha-launcher-assets ${D}${sysconfdir}
     cp -r ${WORKDIR}/mecha-launcher-settings ${D}${sysconfdir}
+
+    install -d ${D}${sysconfdir}/mecha-launcher-assets/action_bar
+    cp -r ${S}/action_bar/src/assets ${D}${sysconfdir}/mecha-launcher-assets/action_bar
+
+    install -d ${D}${sysconfdir}/mecha-launcher-assets/app_dock
+    cp -r ${S}/app_dock/src/assets ${D}${sysconfdir}/mecha-launcher-assets/app_dock
+
+    install -d ${D}${sysconfdir}/mecha-launcher-assets/app_drawer
+    cp -r ${S}/app_drawer/src/assets ${D}${sysconfdir}/mecha-launcher-assets/app_drawer
+
+    install -d ${D}${sysconfdir}/mecha-launcher-assets/lock_screen
+    cp -r ${S}/lock_screen/src/assets ${D}${sysconfdir}/mecha-launcher-assets/lock_screen
+
+    install -d ${D}${sysconfdir}/mecha-launcher-assets/settings_drawer
+    cp -r ${S}/settings_drawer/src/assets ${D}${sysconfdir}/mecha-launcher-assets/settings_drawer
+
+    install -d ${D}${sysconfdir}/mecha-launcher-assets/status_bar
+    cp -r ${S}/status_bar/src/assets ${D}${sysconfdir}/mecha-launcher-assets/status_bar
 }
 
 FILES:${PN} += "/etc/mecha-lanucher-assets/*"

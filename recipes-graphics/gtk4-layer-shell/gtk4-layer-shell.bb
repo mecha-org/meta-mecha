@@ -48,10 +48,12 @@ SRC_URI = " \
 	git://github.com/wmww/gtk4-layer-shell.git;protocol=https;branch=main \
 "
 
-# git@github.com:WillPower3309/swayfx.git
+SRCREV = "a689a399d37d174f2e93442e3adc931a9d8dee90"
+PV = "1.0.2"
 
-SRCREV = "98c693d0a7ea74620e3cec1115bbc66d33d8b843"
-PV = "1.0.1"
+PATCHTOOL = "git"
+SRC_URI:append = " file://0001-Change-libwayland-client-so.patch"
+
 S = "${WORKDIR}/git"
 
 inherit meson pkgconfig features_check vala gobject-introspection

@@ -1,0 +1,25 @@
+From 7fb887a305951de60228a2779aae179360458cab Mon Sep 17 00:00:00 2001
+From: chiragp-mechas <chiragp@mechasystems.com>
+Date: Wed, 8 Nov 2023 17:18:56 +0530
+Subject: [PATCH] Change-libwayland-client-so
+
+---
+ src/libwayland-shim.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/libwayland-shim.c b/src/libwayland-shim.c
+index 05e757a..4baf585 100644
+--- a/src/libwayland-shim.c
++++ b/src/libwayland-shim.c
+@@ -30,7 +30,7 @@ libwayland_shim_init ()
+     if (libwayland_shim_has_initialized ())
+         return;
+ 
+-    void *handle = dlopen("libwayland-client.so", RTLD_LAZY);
++    void *handle = dlopen("libwayland-client.so.0", RTLD_LAZY);
+     if (handle == NULL) {
+         g_error ("failed to dlopen libwayland");
+     }
+-- 
+2.25.1
+

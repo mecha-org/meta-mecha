@@ -37,7 +37,12 @@ enable_separate_home_partition() {
     echo "/dev/mmcblk2p3   /home   ext4   errors=remount-ro  0  2"  >>  ${IMAGE_ROOTFS}/etc/fstab
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition;"
+enable_watchdog(){
+    echo "RuntimeWatchdogSec=30sec"  >>  ${IMAGE_ROOTFS}/etc/systemd/system.conf
+    echo "RebootWatchdogSec=60sec"  >>  ${IMAGE_ROOTFS}/etc/systemd/system.conf
+}
+
+ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition; enable_watchdog;"
 
 # chown -R mecha:mecha ${IMAGE_ROOTFS}/home/mecha
 #    echo "[ "\$HOME" != "/home/mecha" ] || PATH=\$PATH:/usr/local/sbin:/usr/sbin:/sbin" >> ${IMAGE_ROOTFS}/etc/profile

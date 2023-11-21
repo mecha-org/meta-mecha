@@ -69,6 +69,7 @@ PACKAGE_FEED_BASE_PATHS = "deb deb-dev"
 IMAGE_INSTALL:append = " connman connman-client" 
 IMAGE_INSTALL:append = " ntp"
 NTP_SERVERS = "time.google.com time1.google.com time.cloudflare.com"
+TIMEZONE = "Asia/Kolkata"
 
 IMAGE_INSTALL:append = " mesa mesa-demos"     
 IMAGE_INSTALL:append = " bluez5"     
@@ -88,7 +89,7 @@ IMAGE_INSTALL:append = " xhost xauth sysbench htop"
 IMAGE_INSTALL:append = " cage"
 IMAGE_INSTALL:append = " phoc"
 #IMAGE_INSTALL:append = " sway-18 sway-login-configs"
-IMAGE_INSTALL:append = " sway sway-login-configs libpam-pwdfile"
+IMAGE_INSTALL:append = " sway sway-login-configs swayidle libpam-pwdfile"
 # IMAGE_INSTALL:append = " way-vnc neatvnc"
 IMAGE_INSTALL:append = " greetd wlgreet dlm gtkgreet wlr-randr"
 IMAGE_INSTALL:append = " gtk4"
@@ -102,6 +103,7 @@ IMAGE_INSTALL:append = " wvkbd lisgd"
 IMAGE_INSTALL:append = " mecha-launcher mecha-action-bar mecha-app-dock mecha-app-drawer \
                          mecha-lock-screen mecha-settings-drawer mecha-status-bar \
                         "
+
 
 
 # Media files to test audio-video & photos
