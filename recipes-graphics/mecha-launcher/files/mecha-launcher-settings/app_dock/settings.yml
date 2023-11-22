@@ -1,0 +1,49 @@
+title: App Dock  # Empty
+app:
+  id: app-dock    # launcher
+  text_multithreading: true   # false
+  antialiasing: true    # false
+  try_opengles_first: true    # false
+window: 
+  size: [480, 90]
+  position: [0, 0]  # [0, 0]
+  min_size: [480, 60]  # None
+  max_size: null    # None
+  visible: true   # true
+  resizable: true   # true
+  decorations: true   # true
+  transparent: true    # false
+  always_on_top: false    # false
+  icon_path: null # Todo
+css:
+  default: /etc/mecha-launcher-assets/app_dock/assets/css/style.css
+layout:
+  left: []
+  center: []
+  right: []
+modules:
+  pinned_apps:
+    - app_id: drawer_launcher
+      title: Drawer Launcher
+      alias: drawer_launcher
+      icon: /etc/mecha-launcher-assets/app_dock/assets/pngs/drawer_launcher.png
+    - app_id: chromium
+      title: Chromium
+      alias: chromium
+      icon: /etc/mecha-launcher-assets/app_dock/assets/pngs/chromium.png
+    - app_id: mecha_connect
+      title: Mecha Connect
+      alias: mecha-connect
+      icon: /etc/mecha-launcher-assets/app_dock/assets/pngs/mecha_connect.png
+    - app_id: test
+      title: Kitty
+      alias: kitty
+      icon: /etc/mecha-launcher-assets/app_dock/assets/pngs/kitty.png
+    - app_id: test
+      title: Camera
+      alias: camera
+      icon: /etc/mecha-launcher-assets/app_dock/assets/pngs/camera.png
+  home:
+    title: Home
+    icon: /etc/mecha-launcher-assets/app_dock/assets/pngs/home.png
+

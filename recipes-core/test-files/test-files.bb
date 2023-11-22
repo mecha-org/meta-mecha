@@ -9,10 +9,10 @@ SRC_URI =   "file://media-files/abcaudiosample48.mp3 \
              file://media-files/image02.jpg \
              file://media-files/image03.jpg \
              file://media-files/mecha-background.png \
-             file://media-files/sample1_16.wav \
-             file://media-files/sample32.mp3 \
-             file://media-files/SampleVideo_720x480_30mb.mp4 \
-             file://media-files/wildlife.mp4 \
+             file://media-files/sampleaudio_16.wav \
+             file://media-files/sampleaudio_32.mp3 \
+             file://media-files/samplevideo_720x480.mp4 \
+             file://media-files/samplevideo_wildlife.mp4 \
              file://config.yaml \
             "
 
