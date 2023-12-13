@@ -1,0 +1,122 @@
+uuu_version 1.2.39
+
+# This command will be run when i.MX6/7 i.MX8MM, i.MX8MQ
+# SDP: boot -f _flash.bin
+SDP: boot -f imx-boot-mecha-comet-m-gen1-sd.bin-flash_evk
+
+# This command will be run when ROM support stream mode i.MX8QXP, i.MX8QM
+# SDPS: boot -f _flash.bin
+
+
+# These commands will be run when use SPL and will be skipped if no spl
+# if (SPL support SDPV)
+# {
+SDPV: delay 1000
+SDPV: write -f imx-boot-mecha-comet-m-gen1-sd.bin-flash_evk -skipspl
+SDPV: jump
+# }
+
+FB: ucmd setenv fastboot_buffer ${loadaddr}
+FB: download -f Image 
+FB: ucmd setenv fastboot_buffer ${fdt_addr}
+
+#FB: download -f comet-fs/imx8mm-mecha-comet-m-gen1.dtb
+
+FB: download -f imx8mm-mecha-som-gen1-ramfs.dtb
+FB: ucmd setenv fdtfile imx8mm-mecha-som-gen1-ramfs.dtb
+FB: ucmd printenv fdtfile 
+FB: ucmd setenv fastboot_buffer ${initrd_addr}
+
+# Download ramfs image to RAM
+FB: download -f fsl-image-mfgtool-initramfs-mecha-comet-m-gen1-20231120142928.rootfs.cpio.gz.u-boot
+
+FB: ucmd setenv mfgtool_args ${mfgtool_args} mfg_mmcdev=${emmc_dev}
+FB: ucmd run mfgtool_args
+FB: ucmd setenv bootargs root=/dev/ram0 rdinit=/linuxrc rw
+FB: ucmd printenv fdtfile
+FB: acmd booti ${loadaddr} ${initrd_addr} ${fdt_addr}
+
+
+# FBK: ucmd cmdline=echo "Hello World"
+
+# get mmc dev number from kernel command line
+FBK: ucmd cmdline=`cat /proc/cmdline`;cmdline=${cmdline#*mfg_mmcdev=};cmds=($cmdline);echo ${cmds[0]}>/tmp/mmcdev
+
+# Wait for mmc
+FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk2 ]; do sleep 1; echo "wait for /dev/mmcblk2 appear"; done;
+
+FBK: ucp  partition.txt t:/tmp 
+FBK: ucmd sleep 3
+FBK: ucmd sfdisk -f /dev/mmcblk2 < /tmp/partition.txt
+FBK: ucmd sleep 3
+
+# BOOT PARTITION --------------------------
+
+FBK: ucmd lsblk
+# Make FAT32 filesystem for boot
+FBK: ucmd mkfs.vfat /dev/mmcblk2p1
+FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /boot
+# Mount boot partition
+FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t vfat /dev/mmcblk2p1 /boot
+# Copy kernel image to /boot partition 
+FBK: ucp  Image t:/boot
+# Copy dtb file to /boot partition
+FBK: ucp  imx8mm-mecha-comet-m-gen1.dtb t:/boot
+
+# ROOT PARTITION ----------------------------
+
+# Make ext4 fiesystem for root
+FBK: ucmd mkfs.ext4 /dev/mmcblk2p2
+FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /root
+# Mount root partition
+FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t ext4 /dev/mmcblk2p2 /root
+
+# Extract _rootfs.tar.bz2
+FBK: acmd export EXTRACT_UNSAFE_SYMLINKS=1; tar -jx -C /root
+
+# Download image-core to root partition
+FBK: ucp mecha-image-core-mecha-comet-m-gen1-20231127090447.rootfs.tar.bz2 t:- /root
+
+# HOME PARTITION ---------------------------
+
+# Make ext4 filesystem for home
+FBK: ucmd mkfs.ext4 /dev/mmcblk2p3
+FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /home/mecha
+# Mount home partition 
+FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t ext4 /dev/mmcblk2p3 /home/mecha
+
+FBK: ucmd sync
+FBK: DONE
+
+
+
+
+
+
+
+
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/dev/zero of=/dev/mmcblk2 bs=1k seek=4096 count=1
+#FBK: ucmd sync
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 0 > /sys/block/mmcblk2boot0/force_ro
+#FBK: ucp  _flash.bin t:/tmp
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; dd if=/tmp/_flash.bin of=/dev/mmcblk2 bs=1K seek=32
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; echo 1 > /sys/block/mmcblk2boot0/force_ro
+
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk2p1 ]; do sleep 1; done
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.vfat /dev/mmcblk2p1
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; mkdir -p /mnt/fat
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t vfat /dev/mmcblk2p1 /mnt/fat
+
+
+#FBK: ucmd umount /mnt/fat
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; mkfs.ext3 -F -E nodiscard /dev/mmcblk2p2
+#FBK: ucmd mkdir -p /mnt/ext3
+#FBK: ucmd mmc=`cat /tmp/mmcdev`; mount /dev/mmcblk2p2 /mnt/ext3
+#FBK: acmd export EXTRACT_UNSAFE_SYMLINKS=1; tar -jx -C /mnt/ext3
+
+# FBK: ucp  _rootfs.tar.bz2 t:-
+#FBK: ucmd sync
+#FBK: ucmd umount /mnt/ext3
+#FBK: DONE
+
+

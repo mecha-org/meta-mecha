@@ -1,0 +1,8 @@
+label: dos
+label-id: 0xa4b54066
+device: /dev/mmcblk2
+unit: sectors
+
+/dev/mmcblk2p1 : start=       20480, size=      204800, type=c, bootable --label boot
+/dev/mmcblk2p2 : start=      225280, size=     5120000, type=83 --lable root
+/dev/mmcblk2p3 : start=     5345280, size=    55775232, type=83 --lable home

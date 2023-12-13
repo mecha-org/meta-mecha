@@ -1,0 +1,67 @@
+From 64371428f8e534e62e506027983db27bd2b56bc3 Mon Sep 17 00:00:00 2001
+From: Shoaib Merchant <shoaib@mechasystems.com>
+Date: Fri, 8 Dec 2023 15:25:38 +0530
+Subject: [PATCH] feat: adds support for handling minimize toplevel
+
+---
+ include/sway/tree/view.h |  1 +
+ sway/tree/view.c         | 24 ++++++++++++++++++++++++
+ 2 files changed, 25 insertions(+)
+
+diff --git a/include/sway/tree/view.h b/include/sway/tree/view.h
+index 856651a5..1e6bc635 100644
+--- a/include/sway/tree/view.h
++++ b/include/sway/tree/view.h
+@@ -103,6 +103,7 @@ struct sway_view {
+ 	struct wl_listener foreign_fullscreen_request;
+ 	struct wl_listener foreign_close_request;
+ 	struct wl_listener foreign_destroy;
++	struct wl_listener foreign_minimize;
+ 
+ 	bool destroying;
+ 
+diff --git a/sway/tree/view.c b/sway/tree/view.c
+index 00dc4721..451543bf 100644
+--- a/sway/tree/view.c
++++ b/sway/tree/view.c
+@@ -399,6 +399,27 @@ void view_request_activate(struct sway_view *view, struct sway_seat *seat) {
+ 	transaction_commit_dirty();
+ }
+ 
++static void handle_foreign_minimize(struct wl_listener *listener, void *data) {
++	struct sway_view *view = wl_container_of(listener, view, foreign_minimize);
++	struct wlr_foreign_toplevel_handle_v1_minimized_event *event = data;
++	struct sway_container *container = view->container;
++	if (!container->pending.workspace) {
++		while (container->pending.parent) {
++			container = container->pending.parent;
++		}
++	}
++	if(event->minimized) {
++		if (!container->scratchpad) {
++			root_scratchpad_add_container(container, NULL);
++		} else if (container->pending.workspace) {
++			root_scratchpad_hide(container);
++		}
++	} else {
++		if(container->scratchpad)
++			root_scratchpad_show(container);
++	}
++}
++
+ void view_set_csd_from_server(struct sway_view *view, bool enabled) {
+ 	sway_log(SWAY_DEBUG, "Telling view %p to set CSD to %i", view, enabled);
+ 	if (view->xdg_decoration) {
+@@ -800,6 +821,9 @@ void view_map(struct sway_view *view, struct wlr_surface *wlr_surface,
+ 	view->foreign_destroy.notify = handle_foreign_destroy;
+ 	wl_signal_add(&view->foreign_toplevel->events.destroy,
+ 			&view->foreign_destroy);
++	view->foreign_minimize.notify = handle_foreign_minimize;
++	wl_signal_add(&view->foreign_toplevel->events.request_minimize,
++			&view->foreign_minimize);
+ 
+ 	struct sway_container *container = view->container;
+ 	if (target_sibling) {
+-- 
+2.32.1 (Apple Git-133)
+
