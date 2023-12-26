@@ -16,7 +16,6 @@ DEPENDS:append = " virtual/kernel"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-
 install_uuu_script_initramfs() {
 	cp -r ${THISDIR}/files/partition.txt  ${TMPDIR}/deploy/images/mecha-comet-m-gen1/
 	cp -r ${THISDIR}/files/uuu_script_comet_m.auto  ${TMPDIR}/deploy/images/mecha-comet-m-gen1/

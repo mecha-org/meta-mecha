@@ -18,44 +18,29 @@ DEPENDS = "\
     wayland \
     wayland-native \
     wayland-protocols \
-    rust-bin-cross-aarch64 \
-    "
-
-SRC_URI = "\
-    git://gitlab.gnome.org/World/Phosh/squeekboard.git;protocol=https;branch=${BRANCH} \
-    git://source.puri.sm/dorota.czaplejewicz/fragile.git;protocol=https;nobranch=1;name=fragile;destsuffix=fragile \
-    file://0001-Pass-additional-arguments-to-cargo.patch \
-    file://0001-Skip-build-tests-if-not-enabled.patch \
     "
 
 # Modify these as desired
-PV = "1.17.1"
-SRCREV = "2faa98d85f1142383ec8ad1487616c1a7ad1882f"
-BRANCH = "1.17"
-
-SRCREV_FORMAT .= "_fragile"
-SRCREV_fragile = "51048ca11824279c2114c77fef5bcb950838fc09"
-EXTRA_OECARGO_PATHS += "${WORKDIR}/fragile"
+PV = "1.19.0"
+SRCREV = "9f4c5e2264404c6caf1a6e2ca708d090806487ea"
 
 S = "${WORKDIR}/git"
-do_compile[network] = "1"
-inherit cargo_bin rust_bin-common meson pkgconfig
+
+inherit cargo_bin meson pkgconfig
 
 EXTRA_OEMESON = "\
     -Dcargo-flags=[\'--target\',\'${HOST_SYS}\',\'-v\'] \
     -Dtests=false \
     -Ddepdatadir=${datadir} \
-    -Donline=true \
+    -Donline=false \
+    -Dnewer=true \
 "
 
+do_compile[network] = "1"
 export CARGO_FEATURE_STD = "1"
 
-do_compile[network] = "1"
-
 do_configure() {
-    cargo_bin_do_configure
-    export RUSTFLAGS="${RUSTFLAGS}"
-    export RUST_TARGET_PATH="${RUST_TARGET_PATH}"
+    cargo_common_do_configure
     meson_do_configure
 }
 
