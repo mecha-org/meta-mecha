@@ -28,7 +28,7 @@ FB: ucmd printenv fdtfile
 FB: ucmd setenv fastboot_buffer ${initrd_addr}
 
 # Download ramfs image to RAM
-FB: download -f fsl-image-mfgtool-initramfs-mecha-comet-m-gen1-20231120142928.rootfs.cpio.gz.u-boot
+FB: download -f mecha-image-mfgtool-initramfs-mecha-comet-m-gen1-20231213121537.rootfs.cpio.gz.u-boot
 
 FB: ucmd setenv mfgtool_args ${mfgtool_args} mfg_mmcdev=${emmc_dev}
 FB: ucmd run mfgtool_args
@@ -47,7 +47,9 @@ FBK: ucmd mmc=`cat /tmp/mmcdev`; while [ ! -e /dev/mmcblk2 ]; do sleep 1; echo "
 
 FBK: ucp  partition.txt t:/tmp 
 FBK: ucmd sleep 3
-FBK: ucmd sfdisk -f /dev/mmcblk2 < /tmp/partition.txt
+FBK: ucmd sfdisk -f --delete /dev/mmcblk2
+FBK: ucmd sleep 1
+FBK: ucmd sfdisk /dev/mmcblk2 < /tmp/partition.txt
 FBK: ucmd sleep 3
 
 # BOOT PARTITION --------------------------
@@ -75,7 +77,7 @@ FBK: ucmd mmc=`cat /tmp/mmcdev`; mount -t ext4 /dev/mmcblk2p2 /root
 FBK: acmd export EXTRACT_UNSAFE_SYMLINKS=1; tar -jx -C /root
 
 # Download image-core to root partition
-FBK: ucp mecha-image-core-mecha-comet-m-gen1-20231127090447.rootfs.tar.bz2 t:- /root
+FBK: ucp mecha-image-core-mecha-comet-m-gen1-20231213130155.rootfs.tar.bz2 t:- /root
 
 # HOME PARTITION ---------------------------
 
@@ -118,5 +120,4 @@ FBK: DONE
 #FBK: ucmd sync
 #FBK: ucmd umount /mnt/ext3
 #FBK: DONE
-
 

@@ -57,7 +57,7 @@ PACKAGECONFIG[tray] = "-Dtray=enabled,-Dtray=disabled"
 PACKAGECONFIG[xwayland] = "-Dxwayland=enabled,-Dxwayland=disabled,libxcb"
 
 PACKAGECONFIG ?= " \
-	${@bb.utils.filter('DISTRO_FEATURES', 'systemd', d)} \
+	${@bb.utils.filter('DISTRO_FEATURES', 'systemd xwayland', d)} \
 	default-wallpaper \
 	gdk-pixbuf \
 "

@@ -4,7 +4,8 @@ USER = "mecha"
 
 IMAGE_INSTALL:append = " sudo"
 
-#IMAGE_ROOTFS_SIZE ?= "4192"
+# IMAGE_ROOTFS_SIZE ?= "8384"
+# IMAGE_ROOTFS_EXTRA_SPACE:append = " + 8384"
 
 EXTRA_USERS_PARAMS = "\
     useradd -u 1001 -p '\$5\$11223344\$Qi1UvJ46XO2CCaKoCyuMjV4cPu7YWZYWoSJpu3gdGsD' ${USER}; \
@@ -42,28 +43,32 @@ enable_watchdog(){
     echo "RebootWatchdogSec=60sec"  >>  ${IMAGE_ROOTFS}/etc/systemd/system.conf
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition; enable_watchdog;"
+enable_systemd_user(){
+    install -m 0755 -o 1001 -g 1001 -d ${IMAGE_ROOTFS}/home/mecha/.config/systemd/user/default.target.wants
+    install -m 0755 -o 1001 -g 1001 -d ${IMAGE_ROOTFS}/home/mecha/.config/systemd/user/sockets.target.wants
+}
 
-# chown -R mecha:mecha ${IMAGE_ROOTFS}/home/mecha
-#    echo "[ "\$HOME" != "/home/mecha" ] || PATH=\$PATH:/usr/local/sbin:/usr/sbin:/sbin" >> ${IMAGE_ROOTFS}/etc/profile
+symlink_pulseaudio_service(){
+    ln -s ${systemd_user_unitdir}/pulseaudio.service ${IMAGE_ROOTFS}/home/mecha/.config/systemd/user/default.target.wants/pulseaudio.service
+    ln -s ${systemd_user_unitdir}/pulseaudio.socket ${IMAGE_ROOTFS}/home/mecha/.config/systemd/user/sockets.target.wants/pulseaudio.socket
+    chown -R 1001:1001 ${IMAGE_ROOTFS}/home/mecha
+}
+
+ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition; enable_watchdog; enable_systemd_user; symlink_pulseaudio_service;"
 
 
 
+# Tow files to enable fw_printenv command in userspace
+# /mecha_comet_m_gen1-poky-linux/u-boot-imx/2023.04-r0/build/imx8mm_evk_defconfig/u-boot-initial-env
+# fw_env.config contains values of CONFIG_ENV_SIZE=0x4000
+# 								   CONFIG_ENV_OFFSET=0x700000
 
-# enable_separate_home_partition;
-
-
-#     chown -R video ${IMAGE_ROOTFS}/dev/dma_heap/linux,cma
-#     chown -R video ${IMAGE_ROOTFS}/dev/dma_heap/linux,cma-uncached
-#     chown -R video ${IMAGE_ROOTFS}/dev/dma_heap/system
 
 # echo "export PATH=\"/usr/local/sbin:\$PATH\"" > ${IMAGE_ROOTFS}/home/mecha/.zshrc
 # echo "export PATH=\"/usr/sbin:\$PATH\"" >> ${IMAGE_ROOTFS}/home/mecha/.zshrc
 # echo "export PATH=\"/sbin:\$PATH\"" >> ${IMAGE_ROOTFS}/home/mecha/.zshrc
 # echo "export PATH=\"/bin:\$PATH\"" >> ${IMAGE_ROOTFS}/home/mecha/.zshrc
 
-# chown -R mecha:mecha ${IMAGE_ROOTFS}/home/mecha
-#    echo "[ "\$HOME" != "/home/mecha" ] || PATH=\$PATH:/usr/local/sbin:/usr/sbin:/sbin" >> ${IMAGE_ROOTFS}/etc/profile
 
 # do_install:append() {
 #     install -d ${D}/home/mecha
@@ -73,10 +78,6 @@ ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition
 
 #FILES:${PN} += "/home/mecha/.zshrc"
 
-#do_install() {
-#         install -d ${D}/home
-#         install -m -r 0755 media-files ${D}/home
-#}
 
 #    usermod -L -e 1 root; 
 #    usermod -p 'openssl passwd ${ROOTPASS}' root; 
@@ -104,5 +105,3 @@ ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition
 
 #    echo "ACTION==\"add\", SUBSYSTEM==\"graphics\", KERNEL==\"fb0\", TAG+=\"systemd\", ENV{SYSTEMD_WANTS}+=\"weston@mecha.service\"" >> ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
 #    echo "ACTION==\"add\", SUBSYSTEM==\"drm\", KERNEL==\"card0\", TAG+=\"systemd\", ENV{SYSTEMD_WANTS}+=\"weston@mecha.service\"" >> ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
-
-# ${IMAGE_ROOTFS} = /tmp/work/imx8mmlpddr4evk-poky-linux/imx-image-multimedia/1.0-r0/rootfs

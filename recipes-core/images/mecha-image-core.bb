@@ -14,9 +14,9 @@ IMAGE_FEATURES += " \
     tools-debug \
     ssh-server-dropbear \
     hwcodecs \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'weston','', d)} \
+    weston \
 "
-
+#     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'weston','', d)} 
 SDKIMAGE_FEATURES:append = " \
     staticdev-pkgs \
 "
@@ -66,8 +66,20 @@ PACKAGE_FEED_URIS = "https://mecha-org.com/packagerepos/release \
 PACKAGE_FEED_BASE_PATHS = "deb deb-dev"
 #PACKAGE_FEED_ARCHS = "all core2-64"
 
-#IMAGE_INSTALL:append = " networkmanager networkmanager-nmtui"
-IMAGE_INSTALL:append = " connman connman-client" 
+IMAGE_INSTALL:append = " networkmanager networkmanager-nmtui networkmanager-nmcli"
+#IMAGE_INSTALL:append = " connman connman-client" 
+IMAGE_INSTALL:append = " libgpiod libgpiod-tools"
+
+# IMAGE_INSTALL:remove = " connman ifupdown init-ifupdown"
+# IMAGE_INSTALL:remove = " connman-client"
+# IMAGE_INSTALL:remove = " connman-gnome"
+# IMAGE_INSTALL:remove = " connman-plugin-wifi"
+# IMAGE_INSTALL:remove = " connman-plugin-ethernet"
+# IMAGE_INSTALL:remove = " connman-plugin-loopback"
+
+#DISTRO_FEATURES:remove = " ifupdown init-ifupdown sysvinit"
+
+
 IMAGE_INSTALL:append = " ntp"
 NTP_SERVERS = "time.google.com time1.google.com time.cloudflare.com"
 TIMEZONE = "Asia/Kolkata"
@@ -77,13 +89,13 @@ IMAGE_INSTALL:append = " bluez5"
 IMAGE_INSTALL:append = " dpkg"
 IMAGE_INSTALL:append = " git"  
 IMAGE_INSTALL:append = " easysplash easysplash-bootanimation-mecha"     
-IMAGE_INSTALL:append = " overlays"
 
 # poky/meta/recipes-graphics/xorg-app/
 IMAGE_INSTALL:append = " xhost xauth sysbench htop"
 
-# Dhruveh
+# Recipes-Diagnostics
 #IMAGE_INSTALL:append = " mecha-device-test"
+IMAGE_INSTALL:append = " battery blinkgpio"
 
 # IMAGE_INSTALL:append = " cage"
 # IMAGE_INSTALL:append = " phoc"
@@ -98,19 +110,23 @@ IMAGE_INSTALL:append = " greetd wlgreet dlm gtkgreet"
 IMAGE_INSTALL:append = " gtk4"
 
 # shell
-#IMAGE_INSTALL:append = " zsh"
+IMAGE_INSTALL:append = " zsh"
 
 # to,ezpme data
 IMAGE_INSTALL:append = " tzdata"
 
 # Onscreen keyboard
-IMAGE_INSTALL:append = " wvkbd squeekboard"
+IMAGE_INSTALL:append = " wvkbd"
+#IMAGE_INSTALL:append = " squeekboard"
 
 # wayland utilities
 IMAGE_INSTALL:append = " wlr-randr lisgd"
 
 # terminal
 IMAGE_INSTALL:append = " foot"
+
+# benchmarks
+IMAGE_INSTALL:append = " glmark2"
 
 
 
@@ -124,5 +140,5 @@ IMAGE_INSTALL:append = " foot"
 # Media files to test audio-video & photos
 IMAGE_INSTALL:append = " test-files"
 
-IMAGE_INSTALL:append = " wpewebkit cog"
+#IMAGE_INSTALL:append = " wpewebkit cog"
 IMAGE_INSTALL:append = " chromium-ozone-wayland"
