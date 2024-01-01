@@ -55,10 +55,10 @@ CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-fsl-tools-benchmark \
     packagegroup-imx-isp \
     packagegroup-imx-security \
-    packagegroup-fsl-gstreamer1.0 \
-    packagegroup-fsl-gstreamer1.0-full \
 "
-
+# packagegroup-fsl-gstreamer1.0 
+# packagegroup-fsl-gstreamer1.0-full 
+# IMAGE_INSTALL:remove = " gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-bad gstreamer1.0-plugins-good"
 # Enable package-management
 EXTRA_IMAGE_FEATURES += "package-management"
 PACKAGE_FEED_URIS = "https://mecha-org.com/packagerepos/release \
@@ -141,4 +141,4 @@ IMAGE_INSTALL:append = " glmark2"
 IMAGE_INSTALL:append = " test-files"
 
 #IMAGE_INSTALL:append = " wpewebkit cog"
-IMAGE_INSTALL:append = " chromium-ozone-wayland"
+#IMAGE_INSTALL:append = " chromium-ozone-wayland"
