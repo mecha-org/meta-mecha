@@ -30,9 +30,11 @@ do_install() {
     install -m 0775 ${WORKDIR}/media-files/sampleaudio_32.mp3           ${D}/MECHA_TEST/media-files/sampleaudio_32.mp3
     install -m 0775 ${WORKDIR}/media-files/samplevideo_720x480.mp4      ${D}/MECHA_TEST/media-files/samplevideo_720x480.mp4
     install -m 0775 ${WORKDIR}/media-files/samplevideo_wildlife.mp4     ${D}/MECHA_TEST/media-files/samplevideo_wildlife.mp4
-    install -m 0755 ${WORKDIR}/config.yaml ${D}/MECHA_TEST/
+    install -m 0755 ${WORKDIR}/config.yaml                              ${D}/MECHA_TEST/
 }
-INSANE_SKIP_${PN}:append = "already-stripped"
+
+#INSANE_SKIP_${PN}:append = "already-stripped"
 FILES:${PN} += "/MECHA_TEST/*"
+
 
 

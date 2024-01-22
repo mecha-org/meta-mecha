@@ -54,7 +54,17 @@ symlink_pulseaudio_service(){
     chown -R 1001:1001 ${IMAGE_ROOTFS}/home/mecha
 }
 
-ROOTFS_POSTPROCESS_COMMAND += "enable_sudo_group; enable_separate_home_partition; enable_watchdog; enable_systemd_user; symlink_pulseaudio_service;"
+copy_boot_logo_to_boot_part(){
+	cp  ${THISDIR}/files/logo.bmp  ${IMAGE_ROOTFS}/boot
+	cp  ${THISDIR}/files/low_battery.bmp  ${IMAGE_ROOTFS}/boot
+}
+
+ROOTFS_POSTPROCESS_COMMAND +=  "enable_sudo_group; \
+                                enable_separate_home_partition; \
+                                enable_watchdog; enable_systemd_user; \
+                                symlink_pulseaudio_service; \
+                                copy_boot_logo_to_boot_part; \
+                                "
 
 
 

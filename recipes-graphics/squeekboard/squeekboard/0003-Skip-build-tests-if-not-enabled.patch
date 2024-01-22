@@ -1,0 +1,54 @@
+From 9a3ae3acf087004f268ec08701b83288ead52553 Mon Sep 17 00:00:00 2001
+From: Shoaib Merchant <shoaib@mechasystems.com>
+Date: Fri, 19 Jan 2024 14:22:42 +0530
+Subject: [PATCH] disables tests if option is not provided
+
+---
+ src/meson.build | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/src/meson.build b/src/meson.build
+index 5041f56..81c1e20 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -66,7 +66,8 @@ rslibs = custom_target(
+     depends: cargo_deps,
+ )
+
+-build_rstests = custom_target(
++if get_option('tests')
++  build_rstests = custom_target(
+     'build_rstests',
+     build_by_default: false,
+     # HACK: this target needs to build before all the tests,
+@@ -79,17 +80,18 @@ build_rstests = custom_target(
+     console: true,
+     command: [cargo_script, 'test', '--no-run'] + cargo_build_flags,
+     depends: [rslibs, cargo_deps], # no point building tests if the code itself fails
+-)
++  )
+
+-test(
+-    'rstest',
+-    cargo_script,
+-    args: ['test'] + cargo_build_flags,
+-    env: ['SOURCE_DIR=' + meson.source_root()],
+-    # this is a whole Carg-based test suite, let it run for a while
+-    timeout: 900,
+-    depends: [build_rstests, cargo_deps],
+-)
++  test(
++      'rstest',
++      cargo_script,
++      args: ['test'] + cargo_build_flags,
++      env: ['SOURCE_DIR=' + meson.source_root()],
++      # this is a whole Carg-based test suite, let it run for a while
++      timeout: 900,
++      depends: [build_rstests, cargo_deps],
++  )
++endif
+
+ libsqueekboard = static_library('libsqueekboard',
+   sources,
+--
+2.32.1 (Apple Git-133)

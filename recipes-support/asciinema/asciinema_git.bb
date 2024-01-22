@@ -3,16 +3,16 @@ LICENSE = "GPL-3.0-only"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=d32239bcb673463ab874e80d47fae504"
 
 SRC_URI = " \
-	git://github.com/asciinema/asciinema.git;protocol=https;branch=master \
+	git://github.com/asciinema/asciinema.git;protocol=https;branch=develop \
 "
 
 RDEPENDS:${PN} = " \
 	python3 \
+	python3-fcntl \
 "
 
-inherit setuptools3
+inherit python_setuptools_build_meta
 
 S = "${WORKDIR}/git"
-PV = "2.1.0"
-SRCREV = "e08109f99a589d7d6e7ecf68fd93f731976ed61f"
-
+PV = "2.2.0"
+SRCREV = "f3af768f569e0b363bcced11d266d4ed857e21e7"
