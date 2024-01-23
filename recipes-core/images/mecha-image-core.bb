@@ -16,7 +16,7 @@ IMAGE_FEATURES += " \
     hwcodecs \
     weston \
 "
-#     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'weston','', d)} 
+
 SDKIMAGE_FEATURES:append = " \
     staticdev-pkgs \
 "
@@ -50,13 +50,13 @@ CORE_IMAGE_EXTRA_INSTALL += " \
     packagegroup-tools-bluetooth \
     packagegroup-fsl-tools-audio \
     packagegroup-fsl-pulseaudio \
-    packagegroup-core-weston \
     packagegroup-fsl-tools-testapps \
     packagegroup-fsl-tools-benchmark \
     packagegroup-imx-isp \
     packagegroup-imx-security \
     packagegroup-fsl-gstreamer1.0 \
     packagegroup-fsl-gstreamer1.0-full \
+    packagegroup-core-weston \
 "
 
 # Enable package-management
@@ -69,15 +69,6 @@ PACKAGE_FEED_BASE_PATHS = "deb deb-dev"
 IMAGE_INSTALL:append = " networkmanager networkmanager-nmtui networkmanager-nmcli"
 #IMAGE_INSTALL:append = " connman connman-client" 
 IMAGE_INSTALL:append = " libgpiod libgpiod-tools"
-
-# IMAGE_INSTALL:remove = " connman ifupdown init-ifupdown"
-# IMAGE_INSTALL:remove = " connman-client"
-# IMAGE_INSTALL:remove = " connman-gnome"
-# IMAGE_INSTALL:remove = " connman-plugin-wifi"
-# IMAGE_INSTALL:remove = " connman-plugin-ethernet"
-# IMAGE_INSTALL:remove = " connman-plugin-loopback"
-
-#DISTRO_FEATURES:remove = " ifupdown init-ifupdown sysvinit"
 
 
 IMAGE_INSTALL:append = " ntp"
@@ -97,14 +88,16 @@ IMAGE_INSTALL:append = " xhost xauth sysbench htop"
 #IMAGE_INSTALL:append = " mecha-device-test"
 IMAGE_INSTALL:append = " battery blinkgpio"
 
-# IMAGE_INSTALL:append = " cage"
+IMAGE_INSTALL:append = " sway-18 swayfx swayidle swaylock sway-login-configs libpam-pwdfile"
+IMAGE_INSTALL:append = " cage"
 # IMAGE_INSTALL:append = " phoc"
 IMAGE_INSTALL:append = " wayfire wf-config wcm wf-shell"
 
-#IMAGE_INSTALL:append = " sway-18 sway-login-configs"
-IMAGE_INSTALL:append = " sway-18 sway-login-configs libpam-pwdfile"
-# IMAGE_INSTALL:append = " way-vnc neatvnc"
+IMAGE_INSTALL:append = " way-vnc neatvnc"
 IMAGE_INSTALL:append = " greetd wlgreet dlm gtkgreet"
+
+IMAGE_INSTALL:append = " mako"
+IMAGE_INSTALL:append = " playerctl"
 
 # gtk4 demos
 IMAGE_INSTALL:append = " gtk4"
@@ -112,15 +105,23 @@ IMAGE_INSTALL:append = " gtk4"
 # shell
 IMAGE_INSTALL:append = " zsh"
 
+# File editor
+IMAGE_INSTALL:append = " vim"
+
 # to,ezpme data
 IMAGE_INSTALL:append = " tzdata"
 
 # Onscreen keyboard
 IMAGE_INSTALL:append = " wvkbd"
-#IMAGE_INSTALL:append = " squeekboard"
+IMAGE_INSTALL:append = " squeekboard"
 
 # wayland utilities
 IMAGE_INSTALL:append = " wlr-randr lisgd"
+
+IMAGE_INSTALL:append = " asciinema"
+
+# wob — Wayland Overlay Bar
+IMAGE_INSTALL:append = " wob"
 
 # terminal
 IMAGE_INSTALL:append = " foot"
@@ -128,7 +129,21 @@ IMAGE_INSTALL:append = " foot"
 # benchmarks
 IMAGE_INSTALL:append = " glmark2"
 
-
+# Recipes-GUI-extra
+IMAGE_INSTALL:append = " salut \
+                        sway-alttab \
+                        swayimg \
+                        swhkd \
+                        swww \
+                        waypipe \
+                        waysay \
+                        wayshot \
+                        yazi \
+                        alacritty \
+                        gnome-calculator \
+                        dunst \
+                        regreet \
+                        "
 
 # Recipes Graphics Mecha-Launcher
 # IMAGE_INSTALL:append = " mecha-launcher mecha-action-bar mecha-app-dock mecha-app-drawer 
@@ -142,3 +157,12 @@ IMAGE_INSTALL:append = " test-files"
 
 #IMAGE_INSTALL:append = " wpewebkit cog"
 IMAGE_INSTALL:append = " chromium-ozone-wayland"
+
+IMAGE_BOOT_FILES:append = " logo.bmp low_battery.bmp"
+
+IMAGE_INSTALL:append = " linux-optiga-trust-m-libtrustm \
+                         linux-optiga-trust-m-apps \
+                         linux-optiga-trust-m-openssl \
+                       "
+                    
+IMAGE_INSTALL:append = " polkit-gnome"

@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=dfc67e5b1fa10ebb4b70eb0c0ca67bea"
 REQUIRED_DISTRO_FEATURES = "wayland"
 
 DEPENDS += " \
-	wlroots-16 \
+	wlroots-0.16 \
 	cairo \
 	libevdev \
 	json-c \
@@ -24,6 +24,8 @@ DEPENDS += " \
 	wayland \
 	wayland-native \
 	wayland-protocols \
+	scdoc \
+	scdoc-native \
 "
 # sways default config makes use of it
 RDEPENDS:${PN} ?= "swaybg python3 python-i3ipc"
@@ -60,6 +62,9 @@ PACKAGECONFIG ?= " \
 	${@bb.utils.filter('DISTRO_FEATURES', 'systemd xwayland', d)} \
 	default-wallpaper \
 	gdk-pixbuf \
+	client \
+	swaynag \
+	swaybar \
 "
 
 # Reproducibility issue. Fix me!

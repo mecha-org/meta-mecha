@@ -28,7 +28,7 @@ RRECOMMENDS:${PN} = "jq"
 inherit meson pkgconfig features_check
 
 PACKAGECONFIG[systemd] = ",,systemd"
-PACKAGECONFIG[sysvinit] = ",,elogind"
+#PACKAGECONFIG[sysvinit] = ",,elogind"
 PACKAGECONFIG[man-pages] = ",,scdoc-native"
 PACKAGECONFIG[icons] = ",,gdk-pixbuf"
 

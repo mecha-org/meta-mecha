@@ -10,7 +10,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=dfc67e5b1fa10ebb4b70eb0c0ca67bea"
 REQUIRED_DISTRO_FEATURES = "wayland"
 
 DEPENDS += " \
-	wlroots-16 \
+	wlroots-0.16 \
 	cairo \
 	libevdev \
 	json-c \
@@ -40,7 +40,7 @@ RRECOMMENDS:${PN} ?= " \
 "
 
 SRC_URI = " \
-	git://github.com/WillPower3309/swayfx.git;protocol=https \
+	git://github.com/WillPower3309/swayfx.git;protocol=https;branch=master \
 "
 
 SRCREV = "7fe10260d97e6db25a7537e16605e04dddb6d40e"
