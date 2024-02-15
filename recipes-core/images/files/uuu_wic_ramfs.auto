@@ -1,0 +1,102 @@
+uuu_version 1.4.149
+
+# @_flash.bin            | bootloader, which can extract from wic image
+# @_image   [_flash.bin] | wic image burn to emmc.
+# @_initramfs            | initramfs image 
+
+# This command will be run when i.MX6/7 i.MX8MM, i.MX8MQ
+SDP: boot -f _flash.bin -scanlimited 0x800000
+
+# This command will be run when ROM support stream mode
+# i.MX8QXP, i.MX8QM
+SDPS: boot -scanterm -f _flash.bin -scanlimited 0x800000
+
+# These commands will be run when use SPL and will be skipped if no spl
+# SDPU will be deprecated. please use SDPV instead of SDPU
+# {
+SDPU: delay 1000
+SDPU: write -f _flash.bin -offset 0x57c00
+SDPU: jump -scanlimited 0x800000
+# }
+
+# These commands will be run when use SPL and will be skipped if no spl
+# if (SPL support SDPV)
+# {
+SDPV: delay 1000
+SDPV: write -f _flash.bin -skipspl -scanterm -scanlimited 0x800000
+SDPV: jump -scanlimited 0x800000
+# }
+
+
+FB: ucmd setenv fastboot_dev mmc
+FB: ucmd setenv mmcdev ${emmc_dev}
+FB: ucmd mmc dev ${emmc_dev}
+FB: flash -raw2sparse all _image
+FB: flash -scanterm -scanlimited 0x800000 bootloader _flash.bin
+FB: ucmd if env exists emmc_ack; then ; else setenv emmc_ack 0; fi;
+FB: ucmd mmc partconf ${emmc_dev} ${emmc_ack} 1 0
+#FB: done
+
+
+
+FB: ucmd setenv fastboot_buffer ${loadaddr}
+FB: download -f Image 
+FB: ucmd setenv fastboot_buffer ${fdt_addr}
+
+#FB: download -f comet-fs/imx8mm-mecha-comet-m-gen1.dtb
+
+FB: download -f imx8mm-mecha-som-gen1-ramfs.dtb
+FB: ucmd setenv fdtfile imx8mm-mecha-som-gen1-ramfs.dtb
+FB: ucmd printenv fdtfile 
+FB: ucmd setenv fastboot_buffer ${initrd_addr}
+
+
+# Download ramfs image to RAM
+FB: download -f _initramfs
+
+FB: ucmd setenv mfgtool_args ${mfgtool_args} mfg_mmcdev=${emmc_dev}
+FB: ucmd run mfgtool_args
+FB: ucmd setenv bootargs root=/dev/ram0 rdinit=/linuxrc rw
+FB: ucmd printenv fdtfile
+FB: acmd booti ${loadaddr} ${initrd_addr} ${fdt_addr}
+
+FBK: ucmd sleep 2
+FBK: ucmd lsblk
+FBK: ucmd df -h
+FBK: ucmd parted /dev/mmcblk2 resizepart 2 8192MB
+FBK: ucmd sleep 1
+
+# create home partition
+FBK: ucmd parted /dev/mmcblk2 -- mkpart primary ext4 8195MB 29000MB
+FBK: ucmd sleep 1
+
+# resize filesystem
+FBK: ucmd resize2fs -f /dev/mmcblk2p2
+FBK: ucmd sleep 1
+FBK: ucmd mkfs.ext4 /dev/mmcblk2p3
+FBK: ucmd resize2fs -f /dev/mmcblk2p3
+FBK: ucmd sleep 1
+
+# create temp mount directory
+FBK: ucmd mkdir /mnt/home
+FBK: ucmd mkdir /mnt/root
+
+# mount root, home partition
+FBK: ucmd mount /dev/mmcblk2p2 /mnt/root
+FBK: ucmd mount /dev/mmcblk2p3 /mnt/home
+FBK: ucmd sleep 1
+
+# copy all home directory files from rootfs to home partition
+FBK: ucmd cp -r /mnt/root/home/* /mnt/home
+FBK: ucmd chown -R 1001:1001 /mnt/home/mecha
+
+# add to fstab
+FBK: ucmd cat /etc/fstab
+FBK: ucmd echo "/dev/mmcblk2p3 /home ext4 defaults  0 2" >> /mnt/root/etc/fstab
+FBK: ucmd cat /etc/fstab
+FBK: ucmd lsblk
+FBK: ucmd df -h
+
+FBK: ucmd sync
+FBK: DONE
+

@@ -16,11 +16,13 @@ DEPENDS:append = " virtual/kernel"
 
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
+# dosfstools : for mkfs commands
+IMAGE_INSTALL:append = " e2fsprogs-resize2fs parted dosfstools"
+
 install_uuu_script_initramfs() {
-	cp -r ${THISDIR}/files/partition.txt  ${DEPLOY_DIR_IMAGE}
-	cp -r ${THISDIR}/files/uuu_script_comet_m.auto  ${DEPLOY_DIR_IMAGE}
+	cp -r ${THISDIR}/files/uuu_wic_ramffs.auto  ${DEPLOY_DIR_IMAGE}
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "install_uuu_script_initramfs;"
 
-IMAGE_FSTYPES += "tar.gz cpio.gz.u-boot"
+IMAGE_FSTYPES = "cpio.gz.u-boot"

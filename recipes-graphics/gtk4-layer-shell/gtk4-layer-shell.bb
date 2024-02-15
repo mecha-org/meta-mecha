@@ -11,7 +11,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 REQUIRED_DISTRO_FEATURES = "wayland"
 
 DEPENDS += " \
-	wlroots \
+	wlroots-0.16 \
 	cairo \
 	libevdev \
 	json-c \

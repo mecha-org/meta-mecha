@@ -20,11 +20,6 @@ EXTRA_USERS_PARAMS = "\
     usermod -aG render greeter; \
 "
 
-
-# Disable root login and force user for new password at first login
-# usermod -L -e 1 root; 
-# passwd-expire ${USER}; 
-
 # Enable ZSH shell by default -s /bin/zsh
 # useradd -s /bin/zsh -u 1001 -p '\$5\$11223344\$Qi1UvJ46XO2CCaKoCyuMjV4cPu7YWZYWoSJpu3gdGsD' ${USER}; 
 
@@ -34,9 +29,12 @@ enable_sudo_group() {
     echo "[ \"\$HOME\" != \"/home/mecha\" ] || PATH=\$PATH:/usr/local/sbin:/usr/sbin:/sbin:/bin" >> ${IMAGE_ROOTFS}/etc/profile
 }
 
-enable_separate_home_partition() {
-    echo "/dev/mmcblk2p3   /home   ext4   errors=remount-ro  0  2"  >>  ${IMAGE_ROOTFS}/etc/fstab
+enable_separate_boot_partition() {
+    echo "/dev/mmcblk2p1   /boot   vfat   errors=remount-ro  0  2"  >>  ${IMAGE_ROOTFS}/etc/fstab
 }
+
+# To enable separate home parttion
+# echo "/dev/mmcblk2p3   /home   ext4   errors=remount-ro  0  2"  >>  ${IMAGE_ROOTFS}/etc/fstab
 
 enable_watchdog(){
     echo "RuntimeWatchdogSec=30sec"  >>  ${IMAGE_ROOTFS}/etc/systemd/system.conf
@@ -54,16 +52,11 @@ symlink_pulseaudio_service(){
     chown -R 1001:1001 ${IMAGE_ROOTFS}/home/mecha
 }
 
-copy_boot_logo_to_boot_part(){
-	cp  ${THISDIR}/files/logo.bmp  ${IMAGE_ROOTFS}/boot
-	cp  ${THISDIR}/files/low_battery.bmp  ${IMAGE_ROOTFS}/boot
-}
 
 ROOTFS_POSTPROCESS_COMMAND +=  "enable_sudo_group; \
-                                enable_separate_home_partition; \
+                                enable_separate_boot_partition; \
                                 enable_watchdog; enable_systemd_user; \
                                 symlink_pulseaudio_service; \
-                                copy_boot_logo_to_boot_part; \
                                 "
 
 
@@ -89,12 +82,10 @@ ROOTFS_POSTPROCESS_COMMAND +=  "enable_sudo_group; \
 #FILES:${PN} += "/home/mecha/.zshrc"
 
 
+#============DISABLE ROOT LOGING on FIRST BOOT and ================
+#              force user for new password at first login
 #    usermod -L -e 1 root; 
-#    usermod -p 'openssl passwd ${ROOTPASS}' root; 
-#    useradd -p `openssl passwd ${PASSWORD}` ${USER}; 
-
-#    usermod -L -e 1 root; 
-#    passwd-expire ${USER};  DISABLE ROOT LOGING on FIRST BOOT
+#    passwd-expire ${USER};  
 
 #======================== Create Password =========================
 
@@ -104,14 +95,5 @@ ROOTFS_POSTPROCESS_COMMAND +=  "enable_sudo_group; \
 #    mkpasswd -m sha-256 mecha -s "11223344"
 #    $5$11223344$Qi1UvJ46XO2CCaKoCyuMjV4cPu7YWZYWoSJpu3gdGsD
 
-#===================================================================
+#==================================================================
 
-#    echo mecha | sudo -S echo "mecha ALL=(ALL:ALL) ALL" >> ${IMAGE_ROOTFS}/etc/sudoers
-#    sudo touch ${IMAGE_ROOTFS}/etc/default/weston
-#    echo "HOME=/home/mecha/" > ${IMAGE_ROOTFS}/etc/default/weston
-#    sudo touch ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
-#    echo "ACTION==\"add\", SUBSYSTEM==\"graphics\", KERNEL==\"fb0\", TAG+=\"systemd\", ENV{SYSTEMD_WANTS}+=\"weston@mecha.service\"" >> ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
-#    echo "ACTION==\"add\", SUBSYSTEM==\"drm\", KERNEL==\"card0\", TAG+=\"systemd\", ENV{SYSTEMD_WANTS}+=\"weston@mecha.service\"" >> ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
-
-#    echo "ACTION==\"add\", SUBSYSTEM==\"graphics\", KERNEL==\"fb0\", TAG+=\"systemd\", ENV{SYSTEMD_WANTS}+=\"weston@mecha.service\"" >> ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
-#    echo "ACTION==\"add\", SUBSYSTEM==\"drm\", KERNEL==\"card0\", TAG+=\"systemd\", ENV{SYSTEMD_WANTS}+=\"weston@mecha.service\"" >> ${IMAGE_ROOTFS}/etc/udev/rules.d/71-weston-drm.rules
